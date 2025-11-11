@@ -7,3 +7,8 @@ This project investigates activation-level preference unlearning as a mechanism 
 **See the project proposal here for an idea of what we are going to do**
 
 https://github.com/rameyjm7/llm-preference-unlearning/blob/main/TML%20-%20Final%20Project%20Proposal.pdf
+
+
+
+**High level plan**
+<img width="1726" height="675" alt="image" src="https://github.com/user-attachments/assets/7773a3ee-b775-4493-8ec8-26c7a7085e6f" />
