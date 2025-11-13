@@ -26,12 +26,11 @@ Jupyter Lab on port `8888` with token `tml`
 
 ## Usage
 
-### 1. Build and Push Docker Image
-Builds an x86_64 (AMD64) image and pushes it to Docker Hub under `rameyjm7/llm-preference-unlearning:latest`.
+### 1. Build Docker Image
+Builds an x86_64 (AMD64) image.
 
 ```
 make build
-make push
 ```
 
 ### 2. Run Locally via Docker Compose
