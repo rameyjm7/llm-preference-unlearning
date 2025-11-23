@@ -14,8 +14,8 @@ SIF_NAME    = llm_preference_unlearning.sif
 
 # ---------- Build the Docker image ----------
 build:
-	@echo "\nBuilding Docker image..."
-	docker build -t $(DOCKER_USER)/$(IMAGE_NAME):$(TAG) .
+	docker buildx build --platform linux/amd64 --network=host \
+		-t $(DOCKER_USER)/$(IMAGE_NAME):latest --push .
 
 # ---------- Push image to Docker Hub ----------
 push:
