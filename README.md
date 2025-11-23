@@ -3,16 +3,6 @@
 This project investigates activation-level preference unlearning as a mechanism to improve robustness and alignment in large language model–based recommender systems. Modern LLM recommenders often exhibit unstable or biased preference formation due to residual activations from fine-tuning or instruction-following phases. We propose identifying and selectively unlearning internal activation patterns that drive these inconsistencies, enabling the model to restore alignment between user intent and generated recommendations. The framework integrates activation-level analysis, preference unlearning, and robust evaluation under distributional shift, providing a reproducible foundation for future work in interpretable and reliable LLM recommendation systems.
 
 
-
-**See the project proposal here for an idea of what we are going to do**
-
-https://github.com/rameyjm7/llm-preference-unlearning/blob/main/TML%20-%20Final%20Project%20Proposal.pdf
-
-
-
-**High level plan**
-<img width="1726" height="675" alt="image" src="https://github.com/user-attachments/assets/7773a3ee-b775-4493-8ec8-26c7a7085e6f" />
-
 <img width="1055" height="542" alt="image" src="https://github.com/user-attachments/assets/02cad4bf-adb1-4259-ba05-3a2739588e87" />
 <img width="890" height="428" alt="image" src="https://github.com/user-attachments/assets/c0f340bc-565a-4e41-9e2b-0468f69bc0f9" />
 <img width="761" height="360" alt="image" src="https://github.com/user-attachments/assets/2893ffad-6194-4a6a-831c-9e992f3da93f" />
