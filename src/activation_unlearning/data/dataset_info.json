@@ -1,0 +1,6 @@
+{
+  "unlearn": {
+    "file_name": "../datasets/unlearn.jsonl",
+    "format": "sharegpt"
+  }
+}

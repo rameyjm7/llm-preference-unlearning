@@ -1,0 +1,11 @@
+{
+  "unlearn": {
+    "file_name": "unlearn.jsonl",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  }
+}

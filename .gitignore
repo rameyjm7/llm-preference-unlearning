@@ -1,4 +1,15 @@
+LLaMA-Factory/
 .vscode/
 __pycache__
 *.sif
 *.egg-info
+notebooks/activations/
+notebooks/data/
+notebooks/datasets/
+notebooks/fisher/
+notebooks/gradients/
+notebooks/logs/
+notebooks/saliency/
+output/
+lpu-env/
+notebooks/unlearned_checkpoint/

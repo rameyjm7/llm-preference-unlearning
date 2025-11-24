@@ -53,6 +53,25 @@ def generate_response(model, tokenizer, device, question):
     )
     response = tokenizer.decode(output[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
     return response.strip()
+    
+def load_module_prompts():
+    """
+    Load prompt_set.csv from inside the module directory:
+    activation_unlearning/data/prompt_set.csv
+    """
+    module_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(module_dir, "data")
+    prompt_csv = os.path.join(data_dir, "prompt_set.csv")
+
+    if not os.path.exists(prompt_csv):
+        raise FileNotFoundError(
+            f"Expected prompt_set.csv inside module at: {prompt_csv}"
+        )
+
+    with open(prompt_csv, "r", encoding="utf-8") as f:
+        import csv
+        reader = csv.DictReader(f)
+        return [(int(row["id"]), row["prompt"]) for row in reader]
 
 
 # -------------------------------------------------------------------------
