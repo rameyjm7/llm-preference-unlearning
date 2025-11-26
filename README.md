@@ -26,4 +26,8 @@
 
 This project investigates activation-level preference unlearning as a mechanism to improve robustness and alignment in large language model based recommender systems. Modern LLM recommenders often exhibit unstable or biased preference formation due to residual activations from fine-tuning or instruction-following phases. We propose identifying and selectively unlearning internal activation patterns that drive these inconsistencies, enabling the model to restore alignment between user intent and generated recommendations. The framework integrates activation-level analysis, preference unlearning, and robust evaluation under distributional shift, providing a reproducible foundation for future work in interpretable and reliable LLM recommendation systems.
 
+## Preliminary Results
 
+LoRA is very effective at our problem where we do not want movie titles to be returned. Similar things could be done if something is deemed unsafe, preventing a response but also with minimal SFT of a foundational LLM 
+
+<img width="920" height="431" alt="image" src="https://github.com/user-attachments/assets/398800c7-dc3c-456c-a2af-296421056a71" />
