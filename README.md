@@ -34,84 +34,93 @@ LLM-based recommender systems encode user preferences, item associations, and do
 
 1. Overly specific suggestions that contradict a user's stated intent.
 2. Persistent residual preferences from prior fine-tuning or instruction datasets.
-3. Failure to suppress categories that should be excluded (e.g., banned items, unsafe suggestions, copyrighted content, or sensitive entities).
-4. Entanglement between safe and unsafe behaviors in the same activation subspaces.
+3. Failure to suppress categories that should be excluded, such as banned items, unsafe suggestions, copyrighted content, or sensitive entities.
+4. Entanglement between safe and unsafe behaviors in shared activation subspaces.
 
-This creates reliability and safety issues. Even when users explicitly request that the model avoid certain content, the model may continue to surface those items because the underlying activation patterns remain unmodified.
-
-Direct weight editing or full retraining is expensive and brittle. Data-deletion methods (e.g., gradient ascent unlearning, negative SFT) struggle to remove internal representations without harming global model performance.
+Direct weight editing or full retraining is expensive and brittle. Gradient-ascent unlearning and negative SFT methods tend to broadly damage model quality when attempting to remove specific concepts. Instead, we target the underlying activation directions responsible for the unwanted preference, allowing for localized, reversible, and compute-efficient behavioral updates.
 
 Activation-level preference unlearning addresses these challenges by:
 
 - Targeting specific hidden-state features responsible for undesired outputs.
-- Altering the model behavior without modifying the base pretrained weights.
-- Enabling reversible and modular unlearning modules.
-- Supporting low-compute deployment (L4 and Jetson Orin friendly).
-- Preserving overall model quality and general reasoning capability.
+- Altering model behavior without modifying base pretrained weights.
+- Allowing for modular, reversible LoRA adapters.
+- Supporting low-power hardware (L4 and Jetson Orin).
+- Preserving global model capability while suppressing only the targeted concept.
 
-The key insight is that undesired behaviors are often *localized* to predictable activation directions. If we can find those directions and learn a small low-rank update that counters them, we can reliably suppress the unwanted preference without damaging anything else.
+Undesired model behaviors are often localized in predictable activation subspaces. Identifying and counteracting these activation patterns is the key insight behind this work.
 
 ---
 
 ## Preliminary Results
 
-LoRA is very effective at our problem where we do not want movie titles to be returned. Similar techniques can be applied to remove or suppress any class of undesired responses, including unsafe outputs or overly-specific recommendations, with minimal fine-tuning of a foundational LLM.
+LoRA proves highly effective in suppressing specific unwanted behavior (such as movie-title suggestions) while preserving overall model performance. Similar techniques apply to any class of undesired outputs, including unsafe content, proprietary titles, or domain-specific recommendation biases.
 
-<img width="920" height="431" alt="image" src="https://github.com/user-attachments/assets/398800c7-dc3c-456c-a2af-296421056a71" />
+<p align="center">
+<img width="920" height="431" src="https://github.com/user-attachments/assets/398800c7-dc3c-456c-a2af-296421056a71" />
+</p>
+
+These early results demonstrate:
+
+- The model can suppress a targeted item class without loss of general quality.
+- The unlearning generalizes across paraphrases and indirect references.
+- The intervention remains local and does not cause collapse or mode failure.
+- The method is stable on Qwen2.5-3B using minimal compute.
 
 ---
 
 ## LoRA for Preference Unlearning
 
-Low-Rank Adaptation (LoRA) provides a lightweight and effective mechanism for modifying model behavior without altering the core pretrained weights. For preference unlearning, LoRA enables targeted removal of specific behaviors (e.g., returning explicit movie titles) by learning a low-rank update that counteracts the activation patterns driving those behaviors.
+Low-Rank Adaptation (LoRA) provides an efficient mechanism for modifying model behavior while keeping pretrained weights frozen. For unlearning, LoRA provides a low-rank update that counteracts internal representations responsible for generating the unwanted outputs.
 
-### Why LoRA Works for Unlearning
+### Why LoRA is Effective for Unlearning
 
-- Base weights remain unchanged, preserving general reasoning.
-- The update is localized to specific layers or projections.
-- The method is fast, low-compute, and effective even with small datasets.
-- LoRA adapters can be toggled, stacked, or merged to control behavior.
-- The unlearning generalizes beyond exact strings, affecting semantic classes.
+- Base model weights remain untouched.
+- The update stays localized to specific layers or projections.
+- Small, targeted updates prevent global performance degradation.
+- Adapters are modular, reversible, and easy to merge or remove.
+- The unlearning generalizes on semantic variations, not just string matches.
 
-This makes LoRA especially suitable for recommender-system alignment tasks where we need to suppress a specific preference without degrading model quality.
+This makes LoRA well-suited for recommender alignment tasks requiring removal of specific preference directions.
 
-### Activation-Conditioned LoRA (A-LoRA)
+---
 
-Our approach extends standard LoRA by conditioning updates on hidden-state signatures associated with undesired behavior.
+## Activation-Guided Masked LoRA (AG-Masked-LoRA)
+
+Our method extends standard LoRA by conditioning the update on activation patterns known to be associated with the unwanted behavior. This combines activation probing with masked selective LoRA injection.
 
 The pipeline includes:
 
-1. Collect activation traces for prompts that trigger unwanted outputs.
-2. Identify activation vectors or subspaces (using PCA, CCA, or probes).
-3. Train LoRA adapters to push model representations away from those subspaces.
-4. Combine activation-level loss with a lightweight negative SFT dataset.
-5. Evaluate behavioral and activation-space divergence before and after unlearning.
+1. Collect activation traces from prompts triggering undesired behavior.
+2. Identify sensitive neurons through metrics such as saliency-based probes or Fisher information.
+3. Construct neuron-level masks that isolate the responsible directions.
+4. Train masked LoRA adapters that operate only on these subspaces.
+5. Evaluate unlearning effectiveness using adversarial probing and semantic leakage tests.
 
 ### Early Findings
 
-- LoRA effectively suppresses unwanted categories.
-- General language ability is preserved.
-- The unlearning generalizes across paraphrased prompts.
-- Activation projections shift measurably away from the undesired subspace.
-- Computation is minimal: Qwen2.5-3B unlearning runs on A100, L4, and even Jetson Orin.
+- The unlearning affects only the targeted concept (e.g., the movie "Inception").
+- Global reasoning, recommendation quality, and unrelated content remain intact.
+- Activation projections shift away from the undesired latent direction.
+- The method runs efficiently on A100, L4, and Jetson Orin.
 
-These results indicate that LoRA is not merely memorizing a list of forbidden items, but altering deeper latent preference representations.
+These observations strongly indicate that the model is not memorizing prohibitions; instead, its internal preference representations are being explicitly modified.
 
-### Implications for Safety and Deployment
+---
 
-LoRA-based unlearning has strong applications in:
+## Applications
 
-- Safety alignment (removal of harmful behaviors).
-- Policy compliance (removing restricted content).
-- Recommendation de-biasing.
-- Copyright-controlled content suppression.
-- Undoing side effects from prior fine-tuning.
+Activation-guided masked LoRA unlearning is relevant to:
 
-Because LoRA is modular and reversible, organizations can ship models with optional unlearning adapters that can be toggled per deployment environment.
+- Safety alignment and removal of harmful behaviors.
+- Policy enforcement and suppression of prohibited categories.
+- Copyright compliance for generated recommendations.
+- Bias reduction in recommendation systems.
+- Reversible updates for domain-specific constraints.
+
+Because adapters remain modular and do not alter base weights, deployment is flexible and safe for production systems.
 
 ---
 
 ## License
 
 This project is licensed under the MIT License.
-
