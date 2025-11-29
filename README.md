@@ -85,7 +85,7 @@ Pipeline:
 
 ---
 
-## Early Findings (Annotated Figures)
+## Early Findings 
 
 ### **Figure 1 – Activation Sensitivity Map**
 <p align="center">
