@@ -21,6 +21,11 @@
 ### Removing Latent Concepts While Preserving Global LLM Reasoning
 
 ---
+## Quick start
+
+Open this notebook and view all the consolidated code in a single pipeline. Clear the results and try for yourself. Also you can change the prompts and see how that does for you
+
+https://github.com/rameyjm7/llm-preference-unlearning/blob/main/activation_based_unlearning.ipynb
 
 ## Abstract
 
