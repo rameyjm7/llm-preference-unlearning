@@ -21,9 +21,19 @@
 ### Removing Latent Concepts While Preserving Global LLM Reasoning
 
 ---
-## Quick start
+## Project Snapshot
 
-Open this notebook and view all the consolidated code in a single pipeline. Clear the results and try for yourself. Also you can change the prompts and see how that does for you
+Research engineering prototype for activation-guided masked LoRA, concept suppression, prompt perturbation analysis, Fisher/saliency profiling, and before/after behavior evaluation on Qwen2.5-3B.
+
+The repo is organized around a consolidated experiment pipeline:
+
+- prompt perturbation and response-instability analysis
+- activation probing across transformer layers
+- gradient, saliency, and Fisher information profiling
+- masked LoRA updates targeted to sensitive activation regions
+- before/after evaluation for concept removal and reasoning preservation
+
+Primary notebook:
 
 https://github.com/rameyjm7/llm-preference-unlearning/blob/main/activation_based_unlearning.ipynb
 
@@ -42,6 +52,16 @@ Our pipeline integrates:
 - Incremental concept-level unlearning  
 
 Results show that the model cleanly forgets the targeted concept while preserving reasoning, fluency, and instruction fidelity.
+
+## Systems Relevance
+
+This project is useful as a compact example of LLM behavior engineering:
+
+- model-internal instrumentation rather than prompt-only filtering
+- repeatable perturbation/evaluation workflow
+- adapter-based behavior modification without changing base weights
+- evaluation artifacts that compare pre/post behavior across paraphrases
+- deployment-oriented notes across A100, L4, and Jetson Orin environments
 
 ---
 
